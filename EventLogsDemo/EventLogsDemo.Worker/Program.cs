@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging.EventLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,13 @@ namespace EventLogsDemo.Worker
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
+                    services.AddHostedService<Worker>()
+                    .Configure<EventLogSettings>(config =>
+                    {
+                        config.LogName = "Worker Logging Demo";
+                        config.SourceName = "Event Logging Source";
+                    });
+
                 });
     }
 }
